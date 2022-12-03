@@ -1,108 +1,74 @@
-{
- "cells": [
-  {
-   "cell_type": "code",
-   "execution_count": 2,
-   "id": "42553bad",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "import pandas as pd\n",
-    "import numpy as np\n",
-    "\n",
-    "class ANOVA :\n",
-    "    def __init__(self, columns):\n",
-    "        self.columns = columns\n",
-    "        self.k = len(self.columns)\n",
-    "        \n",
-    "    def remplissez_dataframe(self): \n",
-    "        df = pd.DataFrame(columns = self.columns)\n",
-    "        for i in range(len(self.columns)):\n",
-    "            print('donnez la série de données pour le traitement '+ str(i))\n",
-    "            lst = []\n",
-    "            n = int(input(\"Veuillez entrer le nombre d'élements  n\"+str(i)))\n",
-    "            for j in range(0, n):\n",
-    "                ele = int(input())\n",
-    "                lst.append(ele)\n",
-    "            df[self.columns[i]] = lst\n",
-    "            lst = []\n",
-    "        global data \n",
-    "        data = df\n",
-    "        display(df)\n",
-    "        \n",
-    "    def MU(self):\n",
-    "        V = 0\n",
-    "        C = 0\n",
-    "        for i in self.columns :\n",
-    "            C += len(data[i])*np.mean(data[i])\n",
-    "            V += len(data[i])\n",
-    "    \n",
-    "        return float(C/V)  \n",
-    "        \n",
-    "    def SCT(self):\n",
-    "\n",
-    "        N=0\n",
-    "        for i in self.columns : \n",
-    "            for j in range(len(data[i])):\n",
-    "                N += (data[i][j] - float(self.MU()))**2\n",
-    "        \n",
-    "        return float(N)\n",
-    "    \n",
-    "    def SCR(self):\n",
-    "        N=0\n",
-    "        for i in self.columns:\n",
-    "            for j in range(len(data[i])):\n",
-    "                N+= (data[i][j] - data[i].mean())**2\n",
-    "            \n",
-    "        return float(N)\n",
-    "    \n",
-    "    def SCTr(self):\n",
-    "        N = 0\n",
-    "        for i in self.columns : \n",
-    "            for j in range(len(data[i])):\n",
-    "                N+= (np.mean(data[i]) - (self.MU()))**2\n",
-    "            \n",
-    "        return float(N)\n",
-    "    \n",
-    "    def n(self): \n",
-    "        C = 0\n",
-    "        for i in data.columns : \n",
-    "            C+= len(data[i])\n",
-    "        return int(C)\n",
-    "    \n",
-    "    def ANOVA_1F_fixe(self):\n",
-    "    \n",
-    "\n",
-    "        df = pd.DataFrame( {'Somme des carrées (SC)': [self.SCTr(), self.SCR(), self.SCT()], 'Degrés de liberté (ddl)' : [self.k -1 , self.n() - self.k  , self.n() - 1] , 'Moyenne des carrées (MC)': [self.SCTr()/(self.k -1) , self.SCR()/(self.n()-self.k), '-----' ], 'F': [(self.SCTr()/(self.k -1)/(self.SCR()/(self.n()-self.k))), '------','------'] })\n",
-    "        indexes = ['Intergroupes (Traitement)', 'Intragroupe (Erreur)', 'Total']\n",
-    "        df.index = indexes\n",
-    "    \n",
-    "        display(df)\n",
-    "    \n",
-    "    \n",
-    "          "
-   ]
-  }
- ],
- "metadata": {
-  "kernelspec": {
-   "display_name": "Python 3 (ipykernel)",
-   "language": "python",
-   "name": "python3"
-  },
-  "language_info": {
-   "codemirror_mode": {
-    "name": "ipython",
-    "version": 3
-   },
-   "file_extension": ".py",
-   "mimetype": "text/x-python",
-   "name": "python",
-   "nbconvert_exporter": "python",
-   "pygments_lexer": "ipython3",
-   "version": "3.9.7"
-  }
- },
- "nbformat": 4,
- "nbformat_minor": 5
-}
+import pandas as pd
+import numpy as np
+
+class ANOVA :
+    def __init__(self, columns):
+        self.columns = columns
+        self.k = len(self.columns)
+        
+    def remplissez_dataframe(self): 
+        df = pd.DataFrame(columns = self.columns)
+        for i in range(len(self.columns)):
+            print('donnez la série de données pour le traitement '+ str(i))
+            lst = []
+            n = int(input("Veuillez entrer le nombre d'élements  n"+str(i)))
+            for j in range(0, n):
+                ele = int(input())
+                lst.append(ele)
+            df[self.columns[i]] = lst
+            lst = []
+        global data 
+        data = df
+        display(df)
+        
+    def MU(self):
+        V = 0
+        C = 0
+        for i in self.columns :
+            C += len(data[i])*np.mean(data[i])
+            V += len(data[i])
+    
+        return float(C/V)  
+        
+    def SCT(self):
+
+        N=0
+        for i in self.columns : 
+            for j in range(len(data[i])):
+                N += (data[i][j] - float(self.MU()))**2
+        
+        return float(N)
+    
+    def SCR(self):
+        N=0
+        for i in self.columns:
+            for j in range(len(data[i])):
+                N+= (data[i][j] - data[i].mean())**2
+            
+        return float(N)
+    
+    def SCTr(self):
+        N = 0
+        for i in self.columns : 
+            for j in range(len(data[i])):
+                N+= (np.mean(data[i]) - (self.MU()))**2
+            
+        return float(N)
+    
+    def n(self): 
+        C = 0
+        for i in data.columns : 
+            C+= len(data[i])
+        return int(C)
+    
+    def ANOVA_1F_fixe(self):
+    
+
+        df = pd.DataFrame( {'Somme des carrées (SC)': [self.SCTr(), self.SCR(), self.SCT()], 'Degrés de liberté (ddl)' : [self.k -1 , self.n() - self.k  , self.n() - 1] , 'Moyenne des carrées (MC)': [self.SCTr()/(self.k -1) , self.SCR()/(self.n()-self.k), '-----' ], 'F': [(self.SCTr()/(self.k -1)/(self.SCR()/(self.n()-self.k))), '------','------'] })
+        indexes = ['Intergroupes (Traitement)', 'Intragroupe (Erreur)', 'Total']
+        df.index = indexes
+    
+        display(df)
+    
+    
+          
